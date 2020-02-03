@@ -14,7 +14,6 @@ class GoalState:
         for i in range(len(p)):
             self.puzzle.append(int(p[i]))
 
-
 #CLASS TO REPRESENT THE STATE OF EACH OF THE NODES
 class State: 
     def __init__(self, mat):
@@ -38,9 +37,8 @@ class Matrix:
         self.columns = c           
         self.cells = cells
 
-    def setBox( box ):
-        self.blank = box
-
+        def setBox( box ):
+            self.blank = box
 
 #CLASS TO REPRESENT EACH SQUARE 
 class Box: 
@@ -49,6 +47,8 @@ class Box:
         self. id = index
         self.moves = [] 
 
+#############
+#FUNCTION TO MOVE THE BLANK TILE UP
 def move_up( temp, idnt ):
     num = 0 
     new = temp
@@ -62,7 +62,8 @@ def move_up( temp, idnt ):
 
     return new
 
-
+#############
+#FUNCTION TO MOVE THE BLANK TILE DOWN 
 def move_down( temp, idnt ):
     num = 0
     new = temp
@@ -76,7 +77,8 @@ def move_down( temp, idnt ):
 
     return new
 
-
+#############
+#FUNCTION TO MOVE THE BLANK TILE TO THE LEFT 
 def move_left( temp, idnt ):
     num = 0
     new = temp
@@ -90,7 +92,8 @@ def move_left( temp, idnt ):
 
     return new
 
-
+#############
+#FUNCTION TO MOVE THE BLANK TILE TO THE RIGHT 
 def move_right( temp, idnt ):
     num = 0
     new = temp
@@ -106,8 +109,8 @@ def move_right( temp, idnt ):
 
 #############
 #FUNCTION TO PREFORM THE MOVE AND POPULATE THE QUEUE 
-def makeMoves( state, q ): 
-    print ( "Making Moves" )
+def makeMoves( state, q, states ): 
+    print ( "Making Moves...\n" )
 
     for i in state.mat.blank.moves: 
         print ( i ) 
@@ -127,9 +130,17 @@ def makeMoves( state, q ):
             nmat = Matrix(row_col, row_col, new)
             nmat.cells = new.copy()
             nstat = State(nmat)
-            q.put(nstat)
+            nstat.visited = True 
 
-            display_board(nstat.mat)
+            visited = False
+            for s in states:
+                if nstat.mat.cells == s.mat.cells:
+                    print ("Duplicate")
+                    visited = True 
+
+            if not visited:
+                q.put(nstat)
+                display_board(nstat.mat)
 
         elif (i == 'U'):
             temp = []
@@ -146,9 +157,17 @@ def makeMoves( state, q ):
             nmat = Matrix(row_col, row_col, new)
             nmat.cells = new.copy()
             nstat = State(nmat)
-            q.put(nstat)
-            
-            display_board(nstat.mat)
+            nstat.visited = True
+
+            visited = False
+            for s in states:
+                if nstat.mat.cells == s.mat.cells:
+                    print ("Duplicate")
+                    visited = True 
+
+            if not visited:
+                q.put(nstat)
+                display_board(nstat.mat)
 
         elif (i == 'L'): 
             temp = []
@@ -165,9 +184,17 @@ def makeMoves( state, q ):
             nmat = Matrix(row_col, row_col, new)
             nmat.cells = new.copy()
             nstat = State(nmat)
-            q.put(nstat)
-            
-            display_board(nstat.mat)
+            nstat.visited = True
+
+            visited = False
+            for s in states:
+                if nstat.mat.cells == s.mat.cells:
+                    print ("Duplicate")
+                    visited = True 
+
+            if not visited:
+                q.put(nstat)
+                display_board(nstat.mat)
 
         elif (i == 'R'):
             temp = []
@@ -184,25 +211,18 @@ def makeMoves( state, q ):
             nmat = Matrix(row_col, row_col, new)
             nmat.cells = new.copy()
             nstat = State(nmat)
-            q.put(nstat)
-            
-            display_board(nstat.mat)
+            nstat.visited = True
 
+            visited = False
+            for s in states:
+                if nstat.mat.cells == s.mat.cells:
+                    print ("Duplicate")
+                    visited = True
 
+            if not visited:
+                q.put(nstat)
+                display_board(nstat.mat)
 #############
-
-
-def checkState( stateA, checkState ):
-    sA = [] 
-    cS = [] 
-    for i in stateA.mat:
-        sA.append(stateA[i]) 
-        cS.append(checkState[i])
-
-    if (sA == cS): 
-        print ("Visited")
-
-
 
 #############
 #FUNCTION TO COMPARE THE CURRENT STATE WITH THE GOAL STATE 
@@ -212,19 +232,16 @@ def checkGoal( state, goal ):
         return True
     else:
         return False
-
 #############
-
-
-
 
 #############
 #FUNCITON THAT IMPLEMENTS THE BREADTH FIRST SEARCH ALGORITHM 
 def BreadthFirst( state, goal, fifo ):
-    print ("BFS")
-
+    print ("Breadth-First Search... ")
+    print ( "Finding Solution\n" )  
+    
+    states = [] 
     fifo.put(state)
-
     check = checkGoal( state, goal )
     
     if (check):
@@ -234,50 +251,26 @@ def BreadthFirst( state, goal, fifo ):
 
     else:
         while True: 
-            print ( "Finding Solution" )  
             
-            nstate = State(fifo.get(0).mat)
-              
-            makeMoves ( nstate, fifo ) 
             loop = 0  
-            for i in list(fifo.queue): 
-                loop = loop + 1 
 
-                display_board(i.mat)
-                print (loop * 25)
+            nstate = State(fifo.get(0).mat)
+            states.append(nstate)
+            check_moves(nstate.mat)
+            check = checkGoal(nstate, goal)
 
-                check_moves(i.mat)
-                check = checkGoal(i, goal)
+            if (check): 
+                print ("Solution Found\n")
+                display_board (nstate.mat)
+                break
 
-                if (check):
-                    print ( "Solution Found" )
-                    break
-                else: break
-            break
+            makeMoves ( nstate, fifo, states )             
+            loop = loop + 1 
+            print (loop)
+            print (len(list(fifo.queue)))
 
-    """
-    nodes = []
-    nodes.append( Node( board.cells, None, None, 0) )
-
-    while True:
-        if len( nodes ) == 0: return None
-
-        node = nodes[0]
-        nodes.pop(0)
-
-        if collections.Counter(node.state) == collections.Counter(goal):
-            moves = []
-            temp = node
-            while True:
-                moves.insert(0, temp.operator)
-                if temp.depth == 1: break
-                temp = temp.parent
-            return moves				
-
-        nodes.extend( expand_node( node, nodes ) )
-
-    """
-
+            #display_board(i.mat)
+                
 #############
 
 
@@ -292,7 +285,6 @@ def check_moves( board ):
        
         if board.cells[i] == 0: 
             tile = Box(0, i)
-            print (i)
     
     if (tile.id - 1) >= 0 or tile.id == 0:
 
@@ -313,9 +305,6 @@ def check_moves( board ):
     print (tile.moves)
 #############
 
-
-
-
 #############
 #CUSTOM FUNCTION TO DISPLAY THE BOARD
 def display_board( board ):
@@ -333,9 +322,6 @@ def display_board( board ):
 
     print ("\n" + ("------" * board.columns))
 #############
-
-
-
 
 #############
 #FUNCTION USED TO GATHER INPUT ARRAY FROM THE USER
@@ -360,11 +346,7 @@ def getArray():
             continue
 
     return rList
-
 #############
-
-
-
 
 #############
 #FUNCTION THAT PROMPTS THE USER FOR THE MATRIX FILE AND SEARCH ALGORITHM 
@@ -425,7 +407,6 @@ def main():
         else:
             print ("Choose a search pattern (1 or 2):")
             continue 
-
 #############
 
 if __name__ == "__main__":
