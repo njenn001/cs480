@@ -1,6 +1,6 @@
-#Python Implementation of the 8 Puzzle Problem
+# Python Implementation of the 8 Puzzle Problem
 
-###Compile and execute source code 
+### Compile and execute source code 
 
 * Install Anaconda3
 * Open command prompt 
@@ -18,9 +18,10 @@ conda install numpy
 
 * Create a text file containing the array to find the solution to 
 	* Enter matrix entries one by one (1 2 3 4 ... )
-	* Seperate with space 
-	* Leave no space on the end or at the beginning 
-
+		* Seperate with space 
+		* Leave no space on the end or at the beginning 
+	* Name something simple such as "state.txt"
+	
 * Run the code 
 ```
 python 8puzzle.py
@@ -37,7 +38,7 @@ python 8puzzle.py
 * Wait for the program to find the solution
 	
 
-###Using Breadth-First Search 
+### Using Breadth-First Search 
 
 
-###Using Depth-First Search
+### Using Depth-First Search
