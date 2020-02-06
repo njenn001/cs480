@@ -23,11 +23,10 @@ class State:
 
 #CLASS TO REPRESENT THE NODES CREATING THE BRANCHES TO THE GOAL STATE 
 class Node: 
-    def __init__(self, state, parent, operator, depth):
+    def __init__(self, state):
         self.state = state
-        self.parent = parent
-        self.operator = operator 
-        self.depth = 0 
+        self.parent = []
+        self.children = []
 
 #CLASS TO REPRESENT THE ENTIRE BOARD 
 class Matrix:
@@ -109,11 +108,11 @@ def move_right( temp, idnt ):
 
 #############
 #FUNCTION TO PREFORM THE MOVE AND POPULATE THE QUEUE 
-def makeMoves( state, q, states ): 
-    print ( "Making Moves...\n" )
+def makeMoves( state, q, states, node ): 
+    #print ( "Making Moves...\n" )
 
     for i in state.mat.blank.moves: 
-        print ( i ) 
+        #print ( i ) 
 
         if (i == 'D'):
             new = []
@@ -135,12 +134,15 @@ def makeMoves( state, q, states ):
             visited = False
             for s in states:
                 if nstat.mat.cells == s.mat.cells:
-                    print ("Duplicate")
+                    #print ("Duplicate")
                     visited = True 
 
             if not visited:
-                q.put(nstat)
-                display_board(nstat.mat)
+                nNode = Node(nstat)
+                nNode.parent.append(node)
+                q.put(nNode)
+                node.children.append(nNode) 
+                #display_board(nstat.mat)
 
         elif (i == 'U'):
             temp = []
@@ -162,12 +164,15 @@ def makeMoves( state, q, states ):
             visited = False
             for s in states:
                 if nstat.mat.cells == s.mat.cells:
-                    print ("Duplicate")
+                    #print ("Duplicate")
                     visited = True 
 
             if not visited:
-                q.put(nstat)
-                display_board(nstat.mat)
+                nNode = Node(nstat)
+                nNode.parent.append(node)
+                q.put(nNode)
+                node.children.append(nNode) 
+                #display_board(nstat.mat)
 
         elif (i == 'L'): 
             temp = []
@@ -189,12 +194,15 @@ def makeMoves( state, q, states ):
             visited = False
             for s in states:
                 if nstat.mat.cells == s.mat.cells:
-                    print ("Duplicate")
+                    #print ("Duplicate")
                     visited = True 
 
             if not visited:
-                q.put(nstat)
-                display_board(nstat.mat)
+                nNode = Node(nstat)
+                nNode.parent.append(node)
+                q.put(nNode)
+                node.children.append(nNode) 
+                #display_board(nstat.mat)
 
         elif (i == 'R'):
             temp = []
@@ -216,12 +224,15 @@ def makeMoves( state, q, states ):
             visited = False
             for s in states:
                 if nstat.mat.cells == s.mat.cells:
-                    print ("Duplicate")
+                    #print ("Duplicate")
                     visited = True
 
             if not visited:
-                q.put(nstat)
-                display_board(nstat.mat)
+                nNode = Node(nstat)
+                nNode.parent.append(node)
+                q.put(nNode)
+                node.children.append(nNode) 
+                #display_board(nstat.mat)
 #############
 
 #############
@@ -237,40 +248,30 @@ def checkGoal( state, goal ):
 #############
 #FUNCITON THAT IMPLEMENTS THE BREADTH FIRST SEARCH ALGORITHM 
 def BreadthFirst( state, goal, fifo ):
-    print ("Breadth-First Search... ")
-    print ( "Finding Solution\n" )  
+    print ("\nBreadth-First Search... ")
+    print ( "Finding Solution...\n" )  
     
-    states = [] 
-    fifo.put(state)
-    check = checkGoal( state, goal )
-    
-    if (check):
-        print ( "Solution Found" )
-        sols = [] 
-        return sols
+    states = []
 
-    else:
-        while True: 
-            
-            loop = 0  
+    fifo.put(Node(state))
 
-            nstate = State(fifo.get(0).mat)
-            states.append(nstate)
-            check_moves(nstate.mat)
-            check = checkGoal(nstate, goal)
+    while True: 
+        
+        node = fifo.get(0) 
 
-            if (check): 
-                print ("Solution Found\n")
-                display_board (nstate.mat)
-                break
+        nstate = node.state 
+        states.append(nstate)
 
-            makeMoves ( nstate, fifo, states )             
-            loop = loop + 1 
-            print (loop)
-            print (len(list(fifo.queue)))
+        check = checkGoal(nstate, goal)
 
-            #display_board(i.mat)
-                
+        if (check): 
+            print ("Solution Found!!! \n")
+            return node
+
+        check_moves(nstate.mat)                
+        makeMoves ( nstate, fifo, states, node )             
+        
+        #print (len(list(fifo.queue)))                
 #############
 
 
@@ -279,7 +280,7 @@ def BreadthFirst( state, goal, fifo ):
 #FUNCTION TO ASSIGN POSSIBLE MOVES TO EACH BOX 
 def check_moves( board ):
 
-    print ("\nChecking possible moves ... \n")
+    #print ("\nChecking possible moves ... \n")
 
     for i in range(len(board.cells)):
        
@@ -302,7 +303,7 @@ def check_moves( board ):
 
     board.blank = tile 
 
-    print (tile.moves)
+    #print (tile.moves)
 #############
 
 #############
@@ -380,7 +381,6 @@ def main():
     
         if choice == 1:
             check_moves( mat )
-            display_board( mat )
             state = State ( mat ) 
             state.visited = True
             #print ("Breadth-first")
@@ -389,13 +389,20 @@ def main():
 
             if result == None:
                 print ("No solution found")
-            elif result == [None]:
-                print ("Start node was the goal!")
             else:
-                print (result)
-                print (len(result), " moves")
+                print ("Path:\n")
 
-            #
+                while (len(result.parent) >= 0): 
+
+                    if (len (result.parent) != 0):
+                        display_board (result.state.mat)
+                        result = result.parent[0]
+                    elif (len (result.parent) == 0):
+                        display_board (result.state.mat)
+                        break
+
+                #display_board(result.state.mat)
+                
             break
 
         elif choice == 2:
