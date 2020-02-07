@@ -246,6 +246,32 @@ def checkGoal( state, goal ):
 #############
 
 #############
+#FUNCITON THAT IMPLEMENTS THE DEPTH-FIRST SEARCH ALGORITHM 
+def DepthFirst( state, goal, lifo ):
+    print ("\nDepth-First Search... ") 
+    print ("Finding Solution...\n") 
+
+    states = [] 
+
+    lifo.put(Node(state))
+
+    while True: 
+        node = lifo.get(0)
+
+        nstate = node.state
+        states.append(nstate) 
+
+        check = checkGoal (nstate, goal)
+
+        if (check): 
+            print ("Solution Found!!! \n")
+            return node
+
+        check_moves(nstate.mat)                
+        makeMoves ( nstate, lifo, states, node )
+#############
+
+#############
 #FUNCITON THAT IMPLEMENTS THE BREADTH FIRST SEARCH ALGORITHM 
 def BreadthFirst( state, goal, fifo ):
     print ("\nBreadth-First Search... ")
@@ -383,7 +409,6 @@ def main():
             check_moves( mat )
             state = State ( mat ) 
             state.visited = True
-            #print ("Breadth-first")
 
             result = BreadthFirst( state, goal, fifo )
 
@@ -406,10 +431,29 @@ def main():
             break
 
         elif choice == 2:
-            print ("Depth-first")
+            check_moves( mat ) 
+            state = State ( mat )
+            state.visited = True
 
-            display_board(mat)
-            break 
+            result = DepthFirst ( state, goal, lifo )
+
+            if result == None:
+                print ("No solution found")
+            else:
+                print ("Path:\n")
+
+                while (len(result.parent) >= 0): 
+
+                    if (len (result.parent) != 0):
+                        display_board (result.state.mat)
+                        result = result.parent[0]
+                    elif (len (result.parent) == 0):
+                        display_board (result.state.mat)
+                        break
+
+                #display_board(result.state.mat)
+                
+            break
 
         else:
             print ("Choose a search pattern (1 or 2):")
