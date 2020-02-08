@@ -5,6 +5,7 @@ import collections
 import queue 
 from queue import Queue
 
+#############
 #CLASS TO REPRESENT THE GOAL STATE 
 class GoalState:
     def __init__(self, r, c):
@@ -13,21 +14,27 @@ class GoalState:
 
         for i in range(len(p)):
             self.puzzle.append(int(p[i]))
+#############
 
+#############
 #CLASS TO REPRESENT THE STATE OF EACH OF THE NODES
 class State: 
     def __init__(self, mat):
         self.mat = mat
         
         self.visited = False
+#############
 
+#############
 #CLASS TO REPRESENT THE NODES CREATING THE BRANCHES TO THE GOAL STATE 
 class Node: 
     def __init__(self, state):
         self.state = state
         self.parent = []
         self.children = []
+#############
 
+#############
 #CLASS TO REPRESENT THE ENTIRE BOARD 
 class Matrix:
     def __init__(self, r, c, cells):
@@ -38,13 +45,16 @@ class Matrix:
 
         def setBox( box ):
             self.blank = box
+#############
 
+#############
 #CLASS TO REPRESENT EACH SQUARE 
 class Box: 
     def __init__(self, val, index):
         self.value = val 
         self. id = index
         self.moves = [] 
+#############
 
 #############
 #FUNCTION TO MOVE THE BLANK TILE UP
@@ -60,6 +70,7 @@ def move_up( temp, idnt ):
     new [idnt] = cvalue
 
     return new
+#############
 
 #############
 #FUNCTION TO MOVE THE BLANK TILE DOWN 
@@ -75,6 +86,7 @@ def move_down( temp, idnt ):
     new [idnt] = cvalue
 
     return new
+#############
 
 #############
 #FUNCTION TO MOVE THE BLANK TILE TO THE LEFT 
@@ -90,6 +102,7 @@ def move_left( temp, idnt ):
     new [idnt] = cvalue
 
     return new
+#############
 
 #############
 #FUNCTION TO MOVE THE BLANK TILE TO THE RIGHT 
@@ -105,6 +118,7 @@ def move_right( temp, idnt ):
     new [idnt] = cvalue
 
     return new
+#############
 
 #############
 #FUNCTION TO PREFORM THE MOVE AND POPULATE THE QUEUE 
@@ -256,7 +270,7 @@ def DepthFirst( state, goal, lifo ):
     lifo.put(Node(state))
 
     while True: 
-        node = lifo.get(0)
+        node = lifo.get()
 
         nstate = node.state
         states.append(nstate) 
@@ -299,8 +313,6 @@ def BreadthFirst( state, goal, fifo ):
         
         #print (len(list(fifo.queue)))                
 #############
-
-
 
 #############
 #FUNCTION TO ASSIGN POSSIBLE MOVES TO EACH BOX 
@@ -412,6 +424,8 @@ def main():
 
             result = BreadthFirst( state, goal, fifo )
 
+            endQ = queue.LifoQueue(0) 
+
             if result == None:
                 print ("No solution found")
             else:
@@ -420,11 +434,21 @@ def main():
                 while (len(result.parent) >= 0): 
 
                     if (len (result.parent) != 0):
-                        display_board (result.state.mat)
+                        endQ.put(result.state.mat)
+                        #display_board (result.state.mat)
                         result = result.parent[0]
                     elif (len (result.parent) == 0):
-                        display_board (result.state.mat)
+                        endQ.put(result.state.mat)
+                        #display_board (result.state.mat)
                         break
+                    
+                count = 0
+
+                while not endQ.empty(): 
+                    count = count + 1
+                    display_board(endQ.get(0))
+
+                print (str(count - 1) + " Moves")
 
                 #display_board(result.state.mat)
                 
@@ -437,6 +461,8 @@ def main():
 
             result = DepthFirst ( state, goal, lifo )
 
+            endQ = queue.LifoQueue(0) 
+
             if result == None:
                 print ("No solution found")
             else:
@@ -445,11 +471,21 @@ def main():
                 while (len(result.parent) >= 0): 
 
                     if (len (result.parent) != 0):
-                        display_board (result.state.mat)
+                        endQ.put(result.state.mat)
+                        #display_board (result.state.mat)
                         result = result.parent[0]
                     elif (len (result.parent) == 0):
-                        display_board (result.state.mat)
+                        endQ.put(result.state.mat)
+                        #display_board (result.state.mat)
                         break
+                    
+                count = 0
+
+                while not endQ.empty(): 
+                    count = count + 1
+                    display_board(endQ.get(0))
+
+                print (str(count - 1) + " Moves")
 
                 #display_board(result.state.mat)
                 
