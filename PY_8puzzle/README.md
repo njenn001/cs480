@@ -36,6 +36,10 @@ python 8puzzle.py
 	* 2 for Depth-First 
 
 * Wait for the program to find the solution
+
+## Example: 
+
+![Example Matrix](https://github.com/njenn001/cs480/sample.jpg)
 	
 
 ### Using Breadth-First Search 
