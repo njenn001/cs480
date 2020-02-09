@@ -3,6 +3,7 @@ import random
 import math 
 import collections
 import queue 
+import time 
 from queue import Queue
 
 #############
@@ -262,7 +263,7 @@ def checkGoal( state, goal ):
 #############
 #FUNCITON THAT IMPLEMENTS THE DEPTH-FIRST SEARCH ALGORITHM 
 def DepthFirst( state, goal, lifo ):
-    print ("\nDepth-First Search... ") 
+    print ("\nDepth-First Search: ") 
     print ("Finding Solution...\n") 
 
     states = [] 
@@ -274,6 +275,8 @@ def DepthFirst( state, goal, lifo ):
 
         nstate = node.state
         states.append(nstate) 
+
+        #display_board(state.mat)
 
         check = checkGoal (nstate, goal)
 
@@ -288,7 +291,7 @@ def DepthFirst( state, goal, lifo ):
 #############
 #FUNCITON THAT IMPLEMENTS THE BREADTH FIRST SEARCH ALGORITHM 
 def BreadthFirst( state, goal, fifo ):
-    print ("\nBreadth-First Search... ")
+    print ("\nBreadth-First Search: ")
     print ( "Finding Solution...\n" )  
     
     states = []
@@ -301,6 +304,8 @@ def BreadthFirst( state, goal, fifo ):
 
         nstate = node.state 
         states.append(nstate)
+
+        #display_board(nstate.mat)
 
         check = checkGoal(nstate, goal)
 
@@ -422,7 +427,11 @@ def main():
             state = State ( mat ) 
             state.visited = True
 
+            start = time.time() 
             result = BreadthFirst( state, goal, fifo )
+            end = time.time() 
+
+            print ("Breadth-First took " + str((end - start) * 1000) + " milliseconds")
 
             endQ = queue.LifoQueue(0) 
 
@@ -459,7 +468,11 @@ def main():
             state = State ( mat )
             state.visited = True
 
-            result = DepthFirst ( state, goal, lifo )
+            start = time.time() 
+            result = DepthFirst( state, goal, fifo )
+            end = time.time() 
+
+            print ("Depth-First took " + str((end - start) * 1000) + " milliseconds\n")
 
             endQ = queue.LifoQueue(0) 
 
