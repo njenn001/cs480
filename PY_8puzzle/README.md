@@ -39,10 +39,14 @@ python 8puzzle.py
 
 ## Example: 
 
-![Example Matrix](https://github.com/njenn001/cs480/sample.jpg)
+![Example Matrix](https://github.com/njenn001/cs480/PY_8puzzle/sample.jpg)
 	
 
 ### Using Breadth-First Search 
 
+![BFS Solution](https://github.com/njenn001/cs480/PY_8puzzle/sampleBreadth.jpg)
+
 
 ### Using Depth-First Search
+![DFS Solution](https://github.com/njenn001/cs480/PY_8puzzle/sampleDepth.jpg)
+
