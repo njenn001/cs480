@@ -2,25 +2,27 @@
 
 ### Compile and execute source code 
 
-* Install Anaconda3
-* Open command prompt 
-* Create a conda environment 
-* Activate the enviornment 
+* Install Anaconda3.
+* Open command prompt. 
+* Create a conda environment. 
+* Activate the enviornment.
 ```
 conda create --name *env_name*
 conda activate *env_name*
 ```
 
-* Install necessary package(s) 
+* Install necessary package(s). 
 ```
 conda install numpy
 ```
 
-* Create a text file containing the array to find the solution to 
-	* Enter matrix entries one by one (1 2 3 4 ... )
-		* Seperate with space 
-		* Leave no space on the end or at the beginning 
-	* Name something simple such as "state.txt"
+* Create a text file containing the array to find the solution to. 
+	* Enter matrix entries one by one (1 2 3 4 ... ).
+		* Seperate with space. 
+		* Leave no space on the end or at the beginning. 
+	* Name something simple such as "state.txt".
+	* FOR EXAMPLE: 
+	* ![Example Matrix](https://github.com/njenn001/cs480/blob/master/PY_8puzzle/statetxt.JPG)
 	
 * Run the code 
 ```
