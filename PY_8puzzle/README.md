@@ -20,10 +20,13 @@ conda install numpy
 	* Enter matrix entries one by one (1 2 3 4 ... ).
 		* Seperate with space. 
 		* Leave no space on the end or at the beginning. 
+		* Number of entries must equal the number of desired rows * the number of desired columns
 	* Name something simple such as "state.txt".
 	* FOR EXAMPLE: 
 	* ![Example Matrix](https://github.com/njenn001/cs480/blob/master/PY_8puzzle/statetxt.JPG)
-	
+		* Number of desired Rows/Columns:	3
+		* Number of Entries: 	9
+
 * Run the code 
 ```
 python 8puzzle.py
