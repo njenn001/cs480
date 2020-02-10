@@ -39,14 +39,24 @@ python 8puzzle.py
 
 ## Example: 
 
-![Example Matrix](https://github.com/njenn001/cs480/PY_8puzzle/sample.jpg)
-	
+![Example Matrix](https://github.com/njenn001/cs480/PY_8puzzle/sample.JPG)
 
 ### Using Breadth-First Search 
 
-![BFS Solution](https://github.com/njenn001/cs480/PY_8puzzle/sampleBreadth.jpg)
-
+![BFS Solution](https://github.com/njenn001/cs480/PY_8puzzle/sampleBreadth.JPG)
+* Path: 
+	* 3 moves to find solution 
+* Compilation Time:
+	* About 1 millisecond 	
 
 ### Using Depth-First Search
-![DFS Solution](https://github.com/njenn001/cs480/PY_8puzzle/sampleDepth.jpg)
+![DFS Solution](https://github.com/njenn001/cs480/PY_8puzzle/sampleDepth.JPG)
+* Path: 
+	* 3 moves to find solution 
+* Compilation Time: 
+	* About 5 miliseconds 
+
+### Comparison 
+The two search algorithms could find the goal successfully. This example shows the paths to the goal were the same; however, this is not true for ever initial state. The example also shows that the time to execute the Breadth-First search is about one fifth of the time it took to execute the Depth-First search. 
+
 
