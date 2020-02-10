@@ -430,7 +430,7 @@ def main():
             start = time.time() 
             result = BreadthFirst( state, goal, fifo )
             end = time.time() 
-
+            
             print ("Breadth-First took " + str((end - start) * 1000) + " milliseconds")
 
             endQ = queue.LifoQueue(0) 
