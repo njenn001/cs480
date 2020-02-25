@@ -166,7 +166,7 @@ def main():
     ax = plt.axes(projection='3d')
     ax.scatter(xValues, yValues, costs, c = costs, cmap='viridis', linewidth=0.5)
     #plt.show()
-    
+    ax.set_title('Minima Distribution')
     ax.plot_trisurf(xValues, yValues, costs, cmap='viridis', edgecolor='none')
     ax.set_xlabel('$X values$', fontsize=10)
     ax.set_ylabel('$Y values$', fontsize=10)

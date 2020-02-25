@@ -21,3 +21,8 @@ conda install matplotlib
 ```
 python optimize.py
 ```
+
+## Example: 
+
+![Example Plot]{https://github.com/njenn001/cs480/blob/master/PY_Optimization/exampleFig.png}
+
