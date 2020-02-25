@@ -1,13 +1,23 @@
 import numpy as mp 
 import math 
+import random
 
 #############
 #Class to represent each of the queen pieces 
 class Queen:
     def __init__(self):
         self.id = 0
-        self.moves = [] 
+        self.attacking = [] 
         self.safe = True
+#############
+
+#############
+#Class to represenet each space 
+class Space: 
+    def __init__(self, i): 
+        self.index = i 
+        self.queen = None
+
 #############
 
 #############
@@ -16,7 +26,7 @@ class Board:
     def __init__(self, r, c): 
         self.rows = r
         self.cols = c 
-        self.queens = [] 
+        self.spaces = [] 
         self.attacking = 0 
 #############
 
@@ -27,6 +37,8 @@ def eightBy():
     num_q = 8 
     board = Board(row_col, row_col)
 
+    for x in range( row_col*row_col ): 
+        board
 
 #############
 
@@ -46,6 +58,17 @@ def thirtytwoBy():
     row_col = 32 
     num_q = 32
     board = Board(row_col, row_col)
+
+    x = random.uniform 
+    y = 0
+
+    xnot = getNewRand(x)
+
+    i = 0
+    while i < 100: 
+        i+= 1
+        
+
 
 
 #############
@@ -68,7 +91,18 @@ def display_board( board ):
     print ("\n" + ("------" * board.columns))
 #############
 
+def getNewRand(x): 
+    y = 0.0 
+
+    while y <= .1: 
+        y = round(random.uniform(0,1) + x, 1)
+        print(y) 
+        
+    return (y)
+
 def main(): 
+
+    MAX_STEP = 1.0
 
     eightBy() 
     sixteenBy()
