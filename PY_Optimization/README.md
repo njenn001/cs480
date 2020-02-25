@@ -24,5 +24,7 @@ python optimize.py
 
 ## Example: 
 
-![Example Plot]{https://github.com/njenn001/cs480/blob/master/PY_Optimization/exampleFig.png}
+![Example Solution](https://github.com/njenn001/cs480/blob/master/PY_Optimization/Solution.JPG)
+![Example Costs](https://github.com/njenn001/cs480/blob/master/PY_Optimization/costs.JPG)
+![Example Plot](https://github.com/njenn001/cs480/blob/master/PY_Optimization/exampleFig.png)
 
