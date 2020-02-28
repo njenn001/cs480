@@ -1,4 +1,4 @@
-import numpy as mp 
+import numpy as np 
 import math 
 import random
 
@@ -6,7 +6,7 @@ import random
 #Class to represent each of the queen pieces 
 class Queen:
     def __init__(self):
-        self.id = 0
+        self.pos = 0 
         self.attacking = [] 
         self.safe = True
 #############
@@ -15,7 +15,7 @@ class Queen:
 #Class to represenet each space 
 class Space: 
     def __init__(self, i): 
-        self.index = i 
+        self.id = i 
         self.queen = None
 
 #############
@@ -26,19 +26,52 @@ class Board:
     def __init__(self, r, c): 
         self.rows = r
         self.cols = c 
-        self.spaces = [] 
+        self.spaces = []
         self.attacking = 0 
+#############
+
+#############
+#Function to count the number of attacking queen pairs 
+
 #############
 
 #############
 #Function implementing a Hill Climbing Search on a 8x8 board
 def eightBy(): 
+
     row_col = 8 
     num_q = 8 
+    rows = [] 
+    
     board = Board(row_col, row_col)
-
-    for x in range( row_col*row_col ): 
-        board
+    
+    for x in range(row_col*row_col):
+        space = Space(x)
+        board.spaces.append(space) 
+        #print (board.spaces[x].id) 
+        
+    i = 0
+    while i < num_q: 
+        i+=1
+        while True: 
+            row = random.randint(0, 8)
+            
+            used = False
+            for y in rows:
+                if (row == y):
+                    used = True
+            
+            if not used: 
+                rows.append(row)
+                #nQ
+        
+                print ("[" + str(row) + "]")
+                break
+            else: 
+                continue
+    
+    display_board(board)
+    
 
 #############
 
@@ -47,8 +80,36 @@ def eightBy():
 def sixteenBy():
     row_col = 16
     num_q = 16
-    board = Board(row_col, row_col)
+    rows = [] 
 
+    board = Board(row_col, row_col)
+    
+    for x in range(row_col*row_col):
+        space = Space(x)
+        board.spaces.append(space) 
+        #print (board.spaces[x].id) 
+        
+    i = 0
+    while i < num_q: 
+        i+=1
+        while True: 
+            row = random.randint(0, 16)
+            
+            used = False
+            for y in rows:
+                if (row == y):
+                    used = True
+            
+            if not used: 
+                rows.append(row)
+                #nQ
+        
+                print ("[" + str(row) + "]")
+                break
+            else: 
+                continue
+    
+    display_board(board)
     
 #############
 
@@ -57,17 +118,36 @@ def sixteenBy():
 def thirtytwoBy():
     row_col = 32 
     num_q = 32
+    rows = [] 
+
     board = Board(row_col, row_col)
-
-    x = random.uniform 
-    y = 0
-
-    xnot = getNewRand(x)
-
-    i = 0
-    while i < 100: 
-        i+= 1
+    
+    for x in range(row_col*row_col):
+        space = Space(x)
+        board.spaces.append(space) 
+        #print (board.spaces[x].id) 
         
+    i = 0
+    while i < num_q: 
+        i+=1
+        while True: 
+            row = random.randint(0, 32)
+            
+            used = False
+            for y in rows:
+                if (row == y):
+                    used = True
+            
+            if not used: 
+                rows.append(row)
+                #nQ
+        
+                print ("[" + str(row) + "]")
+                break
+            else: 
+                continue
+    
+    display_board(board)
 
 
 
@@ -77,39 +157,58 @@ def thirtytwoBy():
 #CUSTOM FUNCTION TO DISPLAY THE BOARD
 def display_board( board ):
 
-    print ("------" * board.columns)
+    print ("------" * int(board.cols / 2))
 
-    for i in range(board.columns * board.rows):
+    i = 0 
+    while i < len(board.spaces):
+        if (i % board.cols != 0):
+            print ("| " + str(board.spaces[i].id), end = " |")
 
-        if i % board.columns == 0 and i != 0: 
-            print ("\n" + "| " + str(board.cells[i]) + " |-", end = "")
-        elif i % board.columns == 0 and i == 0: 
-            print ("| " + str(board.cells[i]) + " |-", end = "")
-        else:
-            print ("| " + str(board.cells[i]) + " |-", end = "")
-
-    print ("\n" + ("------" * board.columns))
-#############
-
-def getNewRand(x): 
-    y = 0.0 
-
-    while y <= .1: 
-        y = round(random.uniform(0,1) + x, 1)
-        print(y) 
+        if (i % board.cols == 0 and i != 0):
+            print ("\n" + "| " + str(board.spaces[i].id), end = " |")
         
-    return (y)
+        if (i % board.cols == 0 and i == 0):
+            print ("| " + str(board.spaces[i].id), end = " |")
 
+        i += 1
+############# 
+
+#############
+#Main function to choose the size of the board
 def main(): 
 
     MAX_STEP = 1.0
 
-    eightBy() 
-    sixteenBy()
-    thirtytwoBy() 
+    print ("\nChoose a board size:")
+    print ("\n1) 8x8 \n2) 16x16 \n3) 32x32")
+        
+    while True:
+        try:
+            choice = int (input("Choice: "))
+        except Exception as ex: 
+            print ("Not the correct input type")
+            continue
 
+        if choice == 1:
+            print ("\n8x8 Chosen ...")
+            eightBy()
+            break
 
-    
+        if choice == 2:
+            print ("\n16x16 Chosen ...")
+            sixteenBy()
+            break
 
+        if choice == 3: 
+            print ("\n32x32 Chosen ...")
+            thirtytwoBy()
+            break
+
+        else:
+            continue
+#############
+
+#############
 if __name__ == "__main__":
     main()
+#############
