@@ -76,9 +76,20 @@ def findLowest(states, costs, xValues, yValues):
 
 #############
 #Function to implement Differential Evolution
-def dEvolution():
+def dEvolution(x, y, costs, states):
     print ("Evolution")
 
+    #print ("\nHill Climbing")
+
+    cCost = 0 
+
+    j = 0
+    while True:
+
+        x_not = ((random.uniform(0, 1) - 0.5) + x ) 
+        y_not = ((random.uniform(0, 1) - 0.5) + y ) 
+
+        ncost = eggHolderFunction(x_not, y_not)
 
 #############
 
@@ -161,17 +172,12 @@ def main():
             i = 0
             while i < 100: 
                 i += 1 
-                #print ("\nrun: #" + str(i))
 
                 x_in = random.randint(-10000, 10000)
-                #print ("Initial X: " + str(x_in))
                 y_in = random.randint(-10000, 10000)
-                #print ("Initial Y: " + str(y_in))
 
                 cost = eggHolderFunction(x_in, y_in)
                 state = State(x_in, y_in, cost) 
-
-                #check = checkState(state, states)
                 
                 costs.append(cost)   
                 states.append(state)
@@ -226,7 +232,7 @@ def main():
                 costs.append(cost)   
                 states.append(state)
 
-                dEvolution() 
+                dEvolution(x_in, y_in, costs, states) 
 
 
             break

@@ -9,6 +9,7 @@ class Queen:
         self.pos = 0 
         self.attacking = [] 
         self.safe = True
+        self.moves = []
 #############
 
 #############
@@ -17,6 +18,7 @@ class Space:
     def __init__(self, i): 
         self.id = i 
         self.queen = None
+        self.char = '-'
 
 #############
 
@@ -31,7 +33,122 @@ class Board:
 #############
 
 #############
+#Function to check the horizontal attacks 
+def checkHorizontal(board, num_q, q): 
+
+    print ("Horizontal")
+
+############
+
+#Function to check the vertical attacks 
+def checkVertical(board, num_q, space): 
+    print ("Queen Position: " + str(space.queen.pos))
+
+    for i in range(num_q): 
+        if i > 0: 
+            if ((space.queen.pos - (i * num_q)) >  0 or (space.queen.pos - (i * num_q)) == 0):
+                    space.queen.moves.append('U')
+                    print (space.queen.moves) 
+                #else:
+                    #print ("Off Board")
+
+    for i in range(num_q): 
+        if i > 0: 
+            if (space.queen.pos + (i * num_q)) <=  ((num_q * num_q) - 1):
+                    space.queen.moves.append('D')
+                    print (space.queen.moves) 
+                #else:
+                    #print ("Off Board")
+            else: 
+                break
+ 
+
+############
+
+#############
 #Function to count the number of attacking queen pairs 
+def countAttacks(board, num_q): 
+    for x in board.spaces: 
+        if  x.queen != None:
+            
+            checkVertical(board, num_q, x)
+             
+
+#############
+
+#############
+#Function to randomly place the queens in a space on the board 
+def placeQueens(board, num_q): 
+    rows = [] 
+    i = 0
+    while i < num_q: 
+        
+        while True: 
+            if (i == 0):
+                row = random.randint(0, num_q-1)
+                
+                used = False
+                for y in rows:
+                    if (row == y):
+                        used = True
+                
+                if not used: 
+                    rows.append(row)
+
+                    nQ = Queen()
+                    nQ.pos = row
+
+                    board.spaces[row].queen = nQ 
+                    board.spaces[row].char = 'Q'
+
+                    #print ("[" + str(row) + "]")
+                    break
+                else: 
+                    continue
+            if (i == 1):
+                row = random.randint(num_q, (num_q * 2 - 1))
+                
+                used = False
+                for y in rows:
+                    if (row == y):
+                        used = True
+                
+                if not used: 
+                    rows.append(row)    
+
+                    nQ = Queen()
+                    nQ.pos = row
+
+                    board.spaces[row].queen = nQ 
+                    board.spaces[row].char = 'Q'
+
+                    #print ("[" + str(row) + "]")
+                    break
+                else: 
+                    continue
+            else:
+                row = random.randint((num_q * i), (i * num_q) + (num_q - 1))
+                
+                used = False
+                for y in rows:
+                    if (row == y):
+                        used = True
+                
+                if not used: 
+                    rows.append(row)   
+
+                    nQ = Queen()
+                    nQ.pos = row
+
+                    board.spaces[row].queen = nQ 
+                    board.spaces[row].char = 'Q'
+
+                    #print ("[" + str(row) + "]")
+                    break
+                else: 
+                    continue
+            
+        i+=1
 
 #############
 
@@ -50,33 +167,15 @@ def eightBy():
         board.spaces.append(space) 
         #print (board.spaces[x].id) 
         
-    i = 0
-    while i < num_q: 
-        i+=1
-        while True: 
-            row = random.randint(0, 8)
-            
-            used = False
-            for y in rows:
-                if (row == y):
-                    used = True
-            
-            if not used: 
-                rows.append(row)
-                #nQ
-        
-                print ("[" + str(row) + "]")
-                break
-            else: 
-                continue
-    
+    placeQueens(board, num_q)
     display_board(board)
-    
+    countAttacks(board, num_q)
+
 
 #############
 
 #############
-
+#Function implementing a Hill Climbing Search on a 16x16 board
 def sixteenBy():
     row_col = 16
     num_q = 16
@@ -89,32 +188,13 @@ def sixteenBy():
         board.spaces.append(space) 
         #print (board.spaces[x].id) 
         
-    i = 0
-    while i < num_q: 
-        i+=1
-        while True: 
-            row = random.randint(0, 16)
-            
-            used = False
-            for y in rows:
-                if (row == y):
-                    used = True
-            
-            if not used: 
-                rows.append(row)
-                #nQ
-        
-                print ("[" + str(row) + "]")
-                break
-            else: 
-                continue
-    
+    placeQueens(board, num_q)
     display_board(board)
     
 #############
 
 #############
-
+#Function implementing a Hill Climbing Search on a 32x32 board
 def thirtytwoBy():
     row_col = 32 
     num_q = 32
@@ -127,26 +207,7 @@ def thirtytwoBy():
         board.spaces.append(space) 
         #print (board.spaces[x].id) 
         
-    i = 0
-    while i < num_q: 
-        i+=1
-        while True: 
-            row = random.randint(0, 32)
-            
-            used = False
-            for y in rows:
-                if (row == y):
-                    used = True
-            
-            if not used: 
-                rows.append(row)
-                #nQ
-        
-                print ("[" + str(row) + "]")
-                break
-            else: 
-                continue
-    
+    placeQueens(board, num_q)
     display_board(board)
 
 
@@ -162,15 +223,18 @@ def display_board( board ):
     i = 0 
     while i < len(board.spaces):
         if (i % board.cols != 0):
-            print ("| " + str(board.spaces[i].id), end = " |")
+            print ("| " + str(board.spaces[i].char), end = " |")
 
         if (i % board.cols == 0 and i != 0):
-            print ("\n" + "| " + str(board.spaces[i].id), end = " |")
+            print ("\n" + "| " + str(board.spaces[i].char), end = " |")
         
         if (i % board.cols == 0 and i == 0):
-            print ("| " + str(board.spaces[i].id), end = " |")
+            print ("| " + str(board.spaces[i].char), end = " |")
 
         i += 1
+
+    print ("\n")
+    print ("------" * int(board.cols / 2))
 ############# 
 
 #############
