@@ -14,7 +14,6 @@ conda activate *env_name*
 * Install necessary package(s). 
 ```
 conda install numpy
-conda install matplotlib 
 ```
 
 * Run the code 
@@ -22,9 +21,23 @@ conda install matplotlib
 python optimize.py
 ```
 
-## Example: 
+* Choose the type of search desired 
+	* 1 for Hill Climbing  
+	* 2 for Differential Evolution 
 
+* Wait for the program to find the solution to the egg holder function: 
+	* [Eggholder's Function](https://github.com/njenn001/cs480/blob/master/PY_Optimization/eH.JPG)
+
+
+### Hill Climbing choice (1)
+
+#### Examine the minimzed state
 ![Example Solution](https://github.com/njenn001/cs480/blob/master/PY_Optimization/Solution.JPG)
+
+
+#### Explore the previous costs
 ![Example Costs](https://github.com/njenn001/cs480/blob/master/PY_Optimization/costs.JPG)
+
+#### See the minima distrubution on a plot  
 ![Example Plot](https://github.com/njenn001/cs480/blob/master/PY_Optimization/exampleFig.png)
 
