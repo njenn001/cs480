@@ -10,6 +10,7 @@ class Queen:
         self.attacking = [] 
         self.safe = True
         self.moves = []
+        self.attacks = [] 
 #############
 
 #############
@@ -33,15 +34,32 @@ class Board:
 #############
 
 #############
-#Function to check the horizontal attacks 
-def checkHorizontal(board, num_q, q): 
+#Function to count the horizontal attacks 
+def checkDiagonal(board, num_q, space): 
+    print("check horizontal")
 
-    print ("Horizontal")
 
 ############
 
-#Function to check the vertical attacks 
+#############
+#Function to count the horizontal attacks 
 def checkVertical(board, num_q, space): 
+    print("check horizontal")
+
+
+############
+
+#############
+#Function to count the horizontal attacks 
+def checkHorizontal(board, num_q, space): 
+    print("check horizontal")
+
+
+############
+
+############
+#Function to check the moves  
+def checkMoves(board, num_q, space): 
     print ("Queen Position: " + str(space.queen.pos))
 
     for i in range(num_q): 
@@ -71,7 +89,8 @@ def countAttacks(board, num_q):
     for x in board.spaces: 
         if  x.queen != None:
             
-            checkVertical(board, num_q, x)
+            #checkMoves(board, num_q, x)
+            checkHorizontal(board, num_q, x) 
              
 
 #############
@@ -169,7 +188,13 @@ def eightBy():
         
     placeQueens(board, num_q)
     display_board(board)
+
+    for y in board.spaces: 
+        if y.queen != None: 
+            checkMoves(board, num_q, y)
     countAttacks(board, num_q)
+
+    
 
 
 #############
