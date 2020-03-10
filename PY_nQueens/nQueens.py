@@ -3,14 +3,22 @@ import math
 import random
 
 #############
+#Class to represent each node State 
+class State: 
+    def __init__(self):
+        self.board = None 
+
+#############
+
+#############
 #Class to represent each of the queen pieces 
 class Queen:
     def __init__(self):
         self.pos = 0 
         self.attacking = [] 
-        self.safe = True
+        self.safe = False
         self.moves = []
-        self.attacks = [] 
+
 #############
 
 #############
@@ -20,6 +28,7 @@ class Space:
         self.id = i 
         self.queen = None
         self.char = '-'
+        self.attacking = 0 
 
 #############
 
@@ -31,6 +40,7 @@ class Board:
         self.cols = c 
         self.spaces = []
         self.attacking = 0 
+        
 #############
 
 #############
@@ -38,141 +48,105 @@ class Board:
 def checkDiagonal(board, num_q, space): 
     #print("check Diagonal")
 
-    ### Right Diagonal
+    ### Left Down Diagonal
     y = 1
     while y < num_q: 
 
-        if ((space.id + 1) % num_q == 0): 
-            break
-        
-        ### Right Down
-        if (space.id + (y + (y*num_q)) <= ((board.rows * board.cols) - 1)): 
-            if (((space.id + (y + (y*num_q)) + 1) % num_q) == 0): 
-                if board.spaces[space.id + (y + (y*num_q))].queen != None: 
-                    print ("attacking RD")
-                    space.queen.attacking.append(board.spaces[space.id + (y + (y*num_q))].queen)
-                    break 
-
-                #print ("RD " + str(y))
-                #break 
-            else: 
-                if board.spaces[space.id + (y + (y*num_q))].queen != None: 
-                    print ("attacking RD")
-                    space.queen.attacking.append(board.spaces[space.id + (y + (y*num_q))].queen)
-                    break 
-        else: 
-            break 
-
-        y += 1  
-
-    ### Left Diagonal
-    y = 1
-    while y < num_q: 
-
+        ### Auto break if space is on right edge 
         if ((space.id) % num_q == 0): 
+            #print ("Auto Break")
             break
         
-        ### Left Down
-        if (space.id + ((y*num_q) - y) <= ((board.rows * board.cols) - 1)): 
-            if (((space.id + ((y*num_q) - y) + 1) % num_q) == 0): 
+        ### Left Down diagonal
+        if ((space.id + ((y*num_q) - y)) % num_q == 0):
+            if (space.id + ((y*num_q) - y) <= ((board.rows * board.cols) - 1)): 
                 if board.spaces[space.id + ((y*num_q) - y)].queen != None: 
-                    print ("attacking RD")
+                    #print ("attacking LD")
                     space.queen.attacking.append(board.spaces[space.id + ((y*num_q) - y)].queen)
                     break 
+            break
+        if (space.id + ((y*num_q) - y) <= ((board.rows * board.cols) - 1)): 
+            if board.spaces[space.id + ((y*num_q) - y)].queen != None: 
+                #print ("attacking LD")
+                space.queen.attacking.append(board.spaces[space.id + ((y*num_q) - y)].queen)
+                
+        y += 1
 
-                #print ("RD " + str(y))
-                #break 
-            else: 
+    ### Left Up Diagonal
+    y = 1
+    while y < num_q: 
+
+        ### Auto break if space is on right edge 
+        if ((space.id) % num_q == 0): 
+            #print ("Auto Break")
+            break
+        
+        ### Left Up diagonal
+        if ((space.id - (y + (y*num_q))) % num_q == 0):
+            if (space.id - (y + (y*num_q)) >= 0): 
+                if board.spaces[space.id - (y + (y*num_q))].queen != None: 
+                    #print ("attacking LU")
+                    space.queen.attacking.append(board.spaces[space.id - (y + (y*num_q))].queen)
+                    break 
+            break
+        if (space.id - (y + (y*num_q)) >= 0): 
+            if board.spaces[space.id - (y + (y*num_q))].queen != None: 
+                #print ("attacking LU")
+                space.queen.attacking.append(board.spaces[space.id - (y + (y*num_q))].queen)
+                
+        y += 1
+    
+    ### Right Down Diagonal
+    y = 1
+    while y < num_q: 
+
+        ### Auto break if space is on right edge 
+        if ((space.id + 1) % num_q == 0): 
+            #print ("Auto Break")
+            break
+        
+        ### Right Down diagonal
+        if ((space.id + (y + (y*num_q)) + 1) % num_q == 0):
+            if (space.id + (y + (y*num_q)) <= ((board.rows * board.cols) - 1)): 
                 if board.spaces[space.id + (y + (y*num_q))].queen != None: 
-                    print ("attacking RD")
+                    #print ("attacking RD")
                     space.queen.attacking.append(board.spaces[space.id + (y + (y*num_q))].queen)
                     break 
-        else: 
-            break 
+            break
+        if (space.id + (y + (y*num_q)) <= ((board.rows * board.cols) - 1)): 
+            if board.spaces[space.id + (y + (y*num_q))].queen != None: 
+                #print ("attacking RD")
+                space.queen.attacking.append(board.spaces[space.id + (y + (y*num_q))].queen)
+                
+        y += 1
+
+    ### Right Up Diagonal 
+    y = 1 
+    while y < num_q:
+
+        ### Auto break if space is on right edge 
+        if ((space.id + 1) % num_q == 0): 
+            #print ("Auto Break")
+            break
+        
+        ### Right Up diagonal
+        if ((space.id - ((y*num_q) - y) + 1) % num_q == 0):
+            if (space.id - ((y*num_q) - y) > 0): 
+                if board.spaces[space.id  - ((y*num_q) - y)].queen != None: 
+                    #print ("attacking RU")
+                    space.queen.attacking.append(board.spaces[space.id - ((y*num_q) - y)].queen)
+                    break 
+            #print ("sum")
+            break
+
+        if (space.id - ((y*num_q) - y) > 0 ): 
+            if board.spaces[space.id  - ((y*num_q) - y)].queen != None: 
+                #print ("attacking RU")
+                space.queen.attacking.append(board.spaces[space.id  - ((y*num_q) - y)].queen)
 
         y += 1  
 
-    """
-    ### Right Down diagonal
-    for i in range(num_q): 
-        if ((space.id + 1) % num_q == 0): 
-            break
-        if i > 0: 
-            if (space.id + (i + (i*num_q)) <=  ((board.rows * board.cols) - 1)): 
-                if ((space.id + (i + (i*num_q)) % num_q) == 0): 
-                    break 
-                if ((space.id + (i + (i*num_q)) + 1) % num_q == 0 ): 
-                    if board.spaces[space.id + (i + (i*num_q))].queen != None: 
-                        print ("attacking RD")
-                        space.queen.attacking.append(board.spaces[space.id + (i + (i*num_q))].queen)
-                        break 
-                    else: 
-                        break
-                if board.spaces[space.id + (i + (i*num_q))].queen != None: 
-                    print ("attacking RD")
-                    space.queen.attacking.append(board.spaces[space.id + (i + (i*num_q))].queen)
-                else: 
-                    continue
-    """
-
-    ### Left Down diagonal 
-    for i in range(num_q): 
-        if ((space.id % num_q) == 0):
-            break 
-        if i > 0: 
-            if (space.id + ((i*num_q) - i) <=  ((board.rows * board.cols) - 1)): 
-                if ((space.id + ((i*num_q) - i) % num_q) == 0): 
-                    if board.spaces[space.id + ((i*num_q) - i)].queen != None: 
-                        print ("attacking LD")
-                        space.queen.attacking.append(board.spaces[space.id + ((i*num_q) - i)].queen)
-                        break
-                    else: 
-                        break 
-                else:
-                    if board.spaces[space.id + ((i*num_q) - i)].queen != None: 
-                        print ("attacking LD")
-                        space.queen.attacking.append(board.spaces[space.id + ((i*num_q) - i)].queen)
-            else: 
-                break
-
-    ### Left Up diagonal 
-    for i in range(num_q): 
-        if ((space.id % num_q) == 0):
-            break 
-        if i > 0: 
-            if ((space.id - (i + (i*num_q)) % num_q == 0)): 
-                if board.spaces[space.id - (i + (i*num_q))].queen != None: 
-                    print ("attacking LU")
-                    space.queen.attacking.append(board.spaces[space.id - (i + (i*num_q))].queen)
-                    break 
-                else: 
-                    break
-            if (space.id - (i + (i*num_q)) >= 0):
-                if board.spaces[space.id - (i + (i*num_q))].queen != None: 
-                    print ("attacking LU")
-                    space.queen.attacking.append(board.spaces[space.id - (i + (i*num_q))].queen)
-                else: 
-                    continue
-
-    ### Right Up diagonal 
-    for i in range(num_q): 
-        if ((space.id + 1) % num_q == 0): 
-            break
-        if i > 0:
-            if (((space.id - ((i*num_q) - i) + 1 )% num_q == 0)): 
-                if board.spaces[space.id - ((i*num_q) - i)].queen != None: 
-                    print ("attacking RU")
-                    space.queen.attacking.append(board.spaces[space.id - ((i*num_q) - i)].queen)
-                    break 
-                else: 
-                    break 
-            if (space.id - ((i*num_q) - i) > 0):
-                if board.spaces[space.id - ((i*num_q) - i)].queen != None: 
-                    print ("attacking RU")
-                    space.queen.attacking.append(board.spaces[space.id - ((i*num_q) - i)].queen)
-                else: 
-                    continue
-############
+#############
 
 #############
 #Function to count the horizontal attacks 
@@ -192,136 +166,229 @@ def checkVertical(board, num_q, space):
                 if board.spaces[space.id - (i*8)].queen != None: 
                     #print ("attacking")
                     space.queen.attacking.append(board.spaces[space.id - (i*8)].queen)
-############
+
+#############
 
 #############
 #Function to count the horizontal attacks 
 def checkHorizontal(board, num_q, space): 
     #print("check horizontal")
 
-    i = space.id 
+    ### Left Horizontal 
+    i = 0
+    
+    #print (space.id)
 
-    while i %  num_q: 
-        i -= 1 
+    while True: 
+        i += 1 
 
-        if board.spaces[i].queen != None:
-            #print ("attacking")
-            space.queen.attacking.append(board.spaces[i].queen)
+        if (space.id - i) <= 0: 
+            break
+        
+        if (space.id) % num_q == 0: 
+            break 
 
-############
+        if (space.id - i) % num_q == 0: 
+            if (board.spaces[space.id - i].queen != None): 
+                #print ("L Q")
+                space.queen.attacking.append(board.spaces[space.id - i].queen)
 
-############
+            break
+
+        else: 
+            if (board.spaces[space.id - i].queen != None): 
+                #print ("L Q")
+                space.queen.attacking.append(board.spaces[space.id - i].queen)
+
+    ### Right Horizontal 
+    i = 0
+
+    while True: 
+        i += 1 
+
+        if (space.id + i) >= num_q * num_q: 
+            break
+        
+        if (space.id + 1) % num_q == 0: 
+            break 
+
+        if ((space.id + i) + 1) % num_q == 0: 
+            if (board.spaces[space.id + i].queen != None): 
+                #print ("L Q")
+                space.queen.attacking.append(board.spaces[space.id + i].queen)
+
+            break
+
+        else: 
+            if (board.spaces[space.id + i].queen != None): 
+                #print ("L Q")
+                space.queen.attacking.append(board.spaces[space.id + i].queen)
+
+#############
+
+#############
 #Function to check the moves  
 def checkMoves(board, num_q, space): 
     #print ("Queen Position: " + str(space.queen.pos))
 
-    for i in range(num_q): 
-        if i > 0: 
-            if ((space.queen.pos - (i * num_q)) >  0 or (space.queen.pos - (i * num_q)) == 0):
-                    space.queen.moves.append('U')
+    ### Upward moves
+    while True: 
+        if (space.queen.pos - num_q) < 0: 
+            #print ("First")
+            break
+            
+        else:
+            for i in range(num_q): 
+                if (i > 0): 
+                    if ((space.queen.pos - (i * num_q)) >  0 or (space.queen.pos - (i * num_q)) == 0):
+                        if ( board.spaces[space.queen.pos - (i * num_q)].queen != None  ): 
 
-    for i in range(num_q): 
-        if i > 0: 
-            if (space.queen.pos + (i * num_q)) <=  ((num_q * num_q) - 1):
-                    space.queen.moves.append('D')
-            else: 
-                break
-    
-    #print (space.queen.moves) 
+                            #print (space.queen.pos - (i * num_q))
+                            #print ("blocked")
+                            
+                            break
+                        else: 
+
+                            arr = []
+                            arr.append('U')
+                            arr.append(space.queen.pos - (i * num_q))
+                            space.queen.moves.append(board.spaces[space.queen.pos - (i * num_q)].id)
+            break
+
+    ### Downward moves
+    while True: 
+        if (space.queen.pos + num_q) >= num_q * num_q: 
+            #print ("Last")
+            break 
+
+        else:
+            for i in range(num_q): 
+                if (i > 0): 
+                    if ((space.queen.pos + (i * num_q)) < num_q * num_q):
+                        if ( board.spaces[space.queen.pos + (i * num_q)].queen != None  ): 
+
+                            #print (space.queen.pos + (i * num_q))
+                            #print ("blocked")
+                            
+                            break
+                        else: 
+
+                            arr = []
+                            arr.append('U')
+                            arr.append(space.queen.pos + (i * num_q))
+                            space.queen.moves.append(board.spaces[space.queen.pos + (i * num_q)].id)
+            break
+
+    print (space.queen.moves) 
  
+#############
 
-############
+#############
+#Function to make a move 
+def makeMove(board, states, costs): 
+    i = 0
+    for x in board.spaces: 
+        
+        if x.queen != None: 
+            i += 1
+            y = 0 
+
+            for m in x.queen.moves:  
+                y += 1
+                x.queen.moves.pop(0)
+                board.spaces[m].queen = x.queen
+                x.queen = None
+                x.char = "-"
+                board.spaces[m].char = 'M' + str (i)
+                #display_board(board)
+                
+                
+
+                cost = countAttacks 
+
+    display_board(board)
+#############
+
+#############
+#Hill Climbing 
+def hillClimbing (states): 
+
+    cost = 0 
+    costs = [] 
+    while True: 
+        b = states[len(states) - 1].board
+
+        cost = b.attacking
+        costs.append(cost)
+
+        makeMove(b, states, costs)
+        break
+
+        
 
 #############
 #Function to count the number of attacking queen pairs 
 def countAttacks(board, num_q): 
     for x in board.spaces: 
         if  x.queen != None:
-            print ("Queen Position: " + str(x.queen.pos))
+            #print ("Queen Position: " + str(x.queen.pos))
+            
+            x.queen.attacking = [] 
+
             checkHorizontal(board, num_q, x) 
-            checkVertical( board, num_q, x)
-            checkDiagonal( board, num_q, x)
-
-            print (len(x.queen.attacking))
-
+            checkVertical(board, num_q, x)
+            checkDiagonal(board, num_q, x)
+            """
+            print ("Attacks:")
+            if len(x.queen.attacking) != 0: 
+                for y in x.queen.attacking: 
+                    #print (y.pos)
+            """
             board.attacking += len(x.queen.attacking)
 
-    print (board.attacking)
+    #print (str(board.attacking) + " attacks")
 
 #############
 
 #############
-#Function to randomly place the queens in a space on the board 
+#Function to randomly place the queens in a space on the board (different cols)
 def placeQueens(board, num_q): 
+    
+    
     rows = [] 
+    cols = []
     i = 0
     while i < num_q: 
         
         while True: 
-            if (i == 0):
-                row = random.randint(0, num_q-1)
-                
-                used = False
-                for y in rows:
-                    if (row == y):
-                        used = True
-                
-                if not used: 
-                    rows.append(row)
-
-                    nQ = Queen()
-                    nQ.pos = row
-
-                    board.spaces[row].queen = nQ 
-                    board.spaces[row].char = 'Q'
-
-                    #print ("[" + str(row) + "]")
-                    break
-                else: 
-                    continue
-            if (i == 1):
-                row = random.randint(num_q, (num_q * 2 - 1))
-                
-                used = False
-                for y in rows:
-                    if (row == y):
-                        used = True
-                
-                if not used: 
-                    rows.append(row)    
-
-                    nQ = Queen()
-                    nQ.pos = row
-
-                    board.spaces[row].queen = nQ 
-                    board.spaces[row].char = 'Q'
-
-                    #print ("[" + str(row) + "]")
-                    break
-                else: 
-                    continue
-            else:
-                row = random.randint((num_q * i), (i * num_q) + (num_q - 1))
-                
-                used = False
-                for y in rows:
-                    if (row == y):
-                        used = True
-                
-                if not used: 
-                    rows.append(row)   
-
-                    nQ = Queen()
-                    nQ.pos = row
-
-                    board.spaces[row].queen = nQ 
-                    board.spaces[row].char = 'Q'
-
-                    #print ("[" + str(row) + "]")
-                    break
-                else: 
-                    continue
             
+            col = random.randint(0, num_q - 1)
+            row = random.randint(0, num_q - 1)    
+
+            used = False
+            for y in rows:
+                if (row == y):
+                    used = True
+            
+            user = False 
+            for y in cols:
+                if (col == y):
+                    user = True
+
+            if not used and not user:  
+                rows.append(row)   
+
+                nQ = Queen()
+                nQ.pos = ( num_q * col ) + row
+
+                board.spaces[( num_q * col ) + row].queen = nQ 
+                board.spaces[( num_q * col ) + row].char = 'Q'
+
+                #print ("[" + str(row) + "]")
+                break
+            else: 
+                continue
+        
         i+=1
 
 #############
@@ -333,7 +400,8 @@ def eightBy():
     row_col = 8 
     num_q = 8 
     rows = [] 
-    
+    states = [] 
+
     board = Board(row_col, row_col)
     
     for x in range(row_col*row_col):
@@ -342,12 +410,26 @@ def eightBy():
         #print (board.spaces[x].id) 
         
     placeQueens(board, num_q)
+    
     display_board(board)
 
     for y in board.spaces: 
         if y.queen != None: 
             checkMoves(board, num_q, y)
-    countAttacks(board, num_q)
+    
+    # count each pair of attacking queens 
+    countAttacks(board, num_q) 
+
+    # add initial state 
+    nstate = State() 
+    nstate.board = board 
+    states.append(nstate)
+
+    # start hill climbing 
+    hillClimbing(states) 
+
+    # choose which queen to move 
+    #makeMove(board, num_q)
 
 #############
 
@@ -367,6 +449,11 @@ def sixteenBy():
         
     placeQueens(board, num_q)
     display_board(board)
+
+    for y in board.spaces: 
+        if y.queen != None: 
+            checkMoves(board, num_q, y)
+    countAttacks(board, num_q)
     
 #############
 
@@ -386,6 +473,11 @@ def thirtytwoBy():
         
     placeQueens(board, num_q)
     display_board(board)
+
+    for y in board.spaces: 
+        if y.queen != None: 
+            checkMoves(board, num_q, y)
+    countAttacks(board, num_q)
 
 #############
 
@@ -448,6 +540,7 @@ def main():
 #############
 
 #############
+#Calls the main function 
 if __name__ == "__main__":
     main()
 #############
