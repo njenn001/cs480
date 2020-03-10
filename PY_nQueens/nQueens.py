@@ -279,34 +279,64 @@ def checkMoves(board, num_q, space):
                             space.queen.moves.append(board.spaces[space.queen.pos + (i * num_q)].id)
             break
 
-    print (space.queen.moves) 
+    #print (space.queen.moves) 
  
 #############
 
 #############
 #Function to make a move 
 def makeMove(board, states, costs): 
-    i = 0
+
     for x in board.spaces: 
+
+        q = None 
+        b = None 
         
-        if x.queen != None: 
-            i += 1
-            y = 0 
+        if x.queen != None:
+            q = x.queen 
 
-            for m in x.queen.moves:  
-                y += 1
-                x.queen.moves.pop(0)
-                board.spaces[m].queen = x.queen
-                x.queen = None
-                x.char = "-"
-                board.spaces[m].char = 'M' + str (i)
-                #display_board(board)
-                
-                
+            ###for m in q.moves:  
+            x.char = "-" 
+            b = board
 
-                cost = countAttacks 
+            # print (q.moves)
+            m = (q.moves[0])
+            
+            b.spaces[m].queen = q
+            b.spaces[m].char = "Q"
+            
+            b.attacking = countAttacks(b, b.rows)
 
-    display_board(board)
+
+            print (b.attacking)
+
+            print (b.spaces[m].queen.moves)
+
+            print ("cost: " + str(b.attacking))
+            
+            clearAttacks(b)
+            
+            print (b.attacking)
+            
+            display_board(b)
+#############
+
+#############
+#Function to clear attacking pairs before recheck   
+def clearAttacks(board): 
+
+    for x in board.spaces: 
+
+        if x.queen != None:
+
+            for m in x.queen.attacking: 
+                m = None 
+
+            x.queen.attacking = [] 
+
+    board.attacking = 0
+           
+
 #############
 
 #############
@@ -318,17 +348,22 @@ def hillClimbing (states):
     while True: 
         b = states[len(states) - 1].board
 
-        cost = b.attacking
-        costs.append(cost)
+        b.attacking = countAttacks(b, b.rows)
+        print (b.attacking)
+
+        costs.append(b.attacking)
+
+        clearAttacks(b)
+        print (b.attacking)
 
         makeMove(b, states, costs)
         break
 
-        
-
 #############
 #Function to count the number of attacking queen pairs 
 def countAttacks(board, num_q): 
+    cost = 0 
+
     for x in board.spaces: 
         if  x.queen != None:
             #print ("Queen Position: " + str(x.queen.pos))
@@ -338,14 +373,16 @@ def countAttacks(board, num_q):
             checkHorizontal(board, num_q, x) 
             checkVertical(board, num_q, x)
             checkDiagonal(board, num_q, x)
+
             """
             print ("Attacks:")
             if len(x.queen.attacking) != 0: 
                 for y in x.queen.attacking: 
                     #print (y.pos)
             """
-            board.attacking += len(x.queen.attacking)
+            cost += len(x.queen.attacking)
 
+    return cost 
     #print (str(board.attacking) + " attacks")
 
 #############
@@ -416,9 +453,6 @@ def eightBy():
     for y in board.spaces: 
         if y.queen != None: 
             checkMoves(board, num_q, y)
-    
-    # count each pair of attacking queens 
-    countAttacks(board, num_q) 
 
     # add initial state 
     nstate = State() 
