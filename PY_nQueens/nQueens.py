@@ -285,40 +285,41 @@ def checkMoves(board, num_q, space):
 
 #############
 #Function to make a move 
-def makeMove(board, states, costs): 
+def makeMoves(states, costs): 
 
-    for x in board.spaces: 
+    moves = [] 
+    s = states[len(states) - 1]
 
-        q = None 
-        b = None 
+    #display_board(s.board)
+
+    while True: 
         
-        if x.queen != None:
-            q = x.queen 
+        for space in s.board.spaces: 
+            if space.queen != None and space.queen.pos < 15: 
+                print (space.queen.moves)
+                print (len(space.queen.attacking))
 
-            ###for m in q.moves:  
-            x.char = "-" 
-            b = board
+                q = space.queen 
 
-            # print (q.moves)
-            m = (q.moves[0])
-            
-            b.spaces[m].queen = q
-            b.spaces[m].char = "Q"
-            
-            b.attacking = countAttacks(b, b.rows)
+                for m in q.moves: 
 
+                    temp = Board(s.board.rows, s.board.cols) 
+                    temp.spaces = s.board.spaces 
 
-            print (b.attacking)
+                    temp.spaces[m].queen = q 
+                    temp.spaces[m].char = 'Q'
 
-            print (b.spaces[m].queen.moves)
+                    temp.spaces[q.pos].queen = None
+                    temp.spaces[q.pos].char = 'M'
 
-            print ("cost: " + str(b.attacking))
-            
-            clearAttacks(b)
-            
-            print (b.attacking)
-            
-            display_board(b)
+                    #display_board(temp)
+
+                break
+            else:
+                continue
+
+        break
+
 #############
 
 #############
@@ -336,7 +337,6 @@ def clearAttacks(board):
 
     board.attacking = 0
            
-
 #############
 
 #############
@@ -349,15 +349,12 @@ def hillClimbing (states):
         b = states[len(states) - 1].board
 
         b.attacking = countAttacks(b, b.rows)
-        print (b.attacking)
-
         costs.append(b.attacking)
+        makeMoves(states, costs)
 
-        clearAttacks(b)
-        print (b.attacking)
-
-        makeMove(b, states, costs)
         break
+
+#############
 
 #############
 #Function to count the number of attacking queen pairs 
@@ -473,6 +470,7 @@ def sixteenBy():
     row_col = 16
     num_q = 16
     rows = [] 
+    states = [] 
 
     board = Board(row_col, row_col)
     
@@ -482,13 +480,24 @@ def sixteenBy():
         #print (board.spaces[x].id) 
         
     placeQueens(board, num_q)
+    
     display_board(board)
 
     for y in board.spaces: 
         if y.queen != None: 
             checkMoves(board, num_q, y)
-    countAttacks(board, num_q)
-    
+
+    # add initial state 
+    nstate = State() 
+    nstate.board = board 
+    states.append(nstate)
+
+    # start hill climbing 
+    hillClimbing(states) 
+
+    # choose which queen to move 
+    #makeMove(board, num_q)
+
 #############
 
 #############
@@ -497,6 +506,7 @@ def thirtytwoBy():
     row_col = 32 
     num_q = 32
     rows = [] 
+    states = [] 
 
     board = Board(row_col, row_col)
     
@@ -506,12 +516,23 @@ def thirtytwoBy():
         #print (board.spaces[x].id) 
         
     placeQueens(board, num_q)
+    
     display_board(board)
 
     for y in board.spaces: 
         if y.queen != None: 
             checkMoves(board, num_q, y)
-    countAttacks(board, num_q)
+
+    # add initial state 
+    nstate = State() 
+    nstate.board = board 
+    states.append(nstate)
+
+    # start hill climbing 
+    hillClimbing(states) 
+
+    # choose which queen to move 
+    #makeMove(board, num_q)
 
 #############
 
